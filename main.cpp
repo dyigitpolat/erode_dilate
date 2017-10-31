@@ -131,42 +131,28 @@ Mat my_diskclose(Mat img, int r)
 
 Mat connected_components(Mat m)
 {
-    Mat labels = Mat(m.rows, m.cols, 0);
-    labels *= 0;
-    Mat out = m.clone();
-    cvtColor(m, out, CV_GRAY2BGR);
+    Mat labels;
+    Mat out = Mat(m.rows, m.cols, 0);
+    out *= 0;
 
+    int n;
+    n = cv::connectedComponents(m, labels, 8, CV_32S);
+
+    
     int H = m.rows;
     int W = m.cols;
-    for(int i = 1; i < H; i++)
-    {
-        for(int j = 1; j < W; j++)
-        {
-            int x = 0;
-            if( (x = labels.data[(i-1)*W + (j-1)]) ||
-                (x = labels.data[i*W + (j-1)]) ||
-                (x = labels.data[(i-1)*W + j]) )
-            {
-                labels.data[i*W + j] = x;
-            }
-        }
-    }
 
-    for(int i = 1; i < H; i++)
-    {
-        for(int j = 1; j < W; j++)
-        {
-
-        }
-    }
-
-    //color
     for(int i = 0; i < H; i++)
     {
         for(int j = 0; j < W; j++)
         {
+            out.data[i*W + j] = labels.at<int>(i, j)*255/n;
         }
     }
+
+    
+    return out;
+
 }
 
 
@@ -174,7 +160,7 @@ int main(int argc, char** argv )
 {
     // Read image
     Mat img = imread(argv[1] ,CV_LOAD_IMAGE_COLOR);
-    Mat gray_img, thresholded, eroded, morph, masked;
+    Mat gray_img, thresholded, eroded, morph, masked, cc;
 
     cvtColor(img, gray_img, CV_BGR2GRAY);
     thresholded = (gray_img < 52);
@@ -212,7 +198,8 @@ int main(int argc, char** argv )
     masked = my_diskdilate(masked, 3);
 
     mysave(string(argv[1]) + "-MASKED", masked);
-    
+    cc = connected_components(masked);
+    mysave(string(argv[1]) + "---CC", cc);
 
     //waitKey(0);
     return 0;
@@ -223,6 +210,7 @@ void reference_()
     // Read image
     Mat img = imread("data/license_plates/est_095yhf_close.jpg",CV_LOAD_IMAGE_COLOR);
     Mat imgOut = img.clone();
+    
 
     int H = imgOut.rows;
     int W = imgOut.cols;
