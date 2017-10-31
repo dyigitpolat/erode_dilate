@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp",
+        "functional": "cpp",
+        "sstream": "cpp",
+        "ostream": "cpp",
+        "typeinfo": "cpp",
+        "stdexcept": "cpp"
+    }
+}
