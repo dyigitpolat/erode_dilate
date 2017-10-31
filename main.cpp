@@ -204,37 +204,3 @@ int main(int argc, char** argv )
     //waitKey(0);
     return 0;
 }
-
-void reference_()
-{
-    // Read image
-    Mat img = imread("data/license_plates/est_095yhf_close.jpg",CV_LOAD_IMAGE_COLOR);
-    Mat imgOut = img.clone();
-    
-
-    int H = imgOut.rows;
-    int W = imgOut.cols;
-    int C = 3;
-    for(int i = 0; i < H; i++)
-    {
-        for(int j = 0; j < W; j++)
-        {
-            for(int k = 0; k < 3; k++)
-            {
-                imgOut.data[i*W*C + j*C + k] = (i%3 && j%3 ? imgOut.data[i*W*C + j*C + k] : 0 );
-            }
-        }
-    }
-
-    for(int i = 0; i < H; i++)
-    {
-        for(int j = 0; j < W; j++)
-        {
-            //imgOut.data[i*W + j] = (i%3 && j%3 ? imgOut.data[i*W + j] : 0 );
-        
-        }
-    }
-
-    imshow("Test", imgOut);
-    waitKey(0);
-}
